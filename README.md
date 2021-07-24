@@ -1,4 +1,4 @@
-# Computational-Graph-based-Choice-Models
+# Computational graph-based choice models
 
 This open-source aims to implement automatic differentiation for discrete choice models and represent the graph-oriented functions using TensorFlow 2.0.
 
