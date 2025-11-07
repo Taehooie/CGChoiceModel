@@ -86,8 +86,8 @@ y_train = np.array(data[choice_list].values.reshape(len(data[choice_list]), len(
 # In[ ]:
 
 
-def normal_dist(sigma, x_atti, zeta, latent_val):
-
+def normal_dist(sigma_unconstrained, x_atti, zeta, latent_val):
+    sigma = tf.nn.softplus(sigma_unconstrained) + 1e-6 # positive constraint
     L_normal = (1/(tf.sqrt(2*np.pi)*sigma))*tf.exp(-0.5*((np.array(x_atti)-zeta*latent_val)/(sigma))**2)
     L_normal = tf.reshape(L_normal, shape=[len(L_normal), 1])
 
