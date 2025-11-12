@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 import numpy
 import tensorflow as tf
 import tensorflow_probability as tfp
@@ -12,14 +6,8 @@ import numpy as np
 import timeit
 
 
-# In[ ]:
-
-
 # Load Input Data
 data = pd.read_csv('ICLV_input.csv')
-
-
-# In[ ]:
 
 
 ''' Explanatory Variables for latent variables '''
@@ -83,18 +71,12 @@ x_val =  list(com_dict.values())
 y_train = np.array(data[choice_list].values.reshape(len(data[choice_list]), len(choice_list)), dtype=np.float32)
 
 
-# In[ ]:
-
-
 def normal_dist(sigma_unconstrained, x_atti, zeta, latent_val):
     sigma = tf.nn.softplus(sigma_unconstrained) + 1e-6 # positive constraint
     L_normal = (1/(tf.sqrt(2*np.pi)*sigma))*tf.exp(-0.5*((np.array(x_atti)-zeta*latent_val)/(sigma))**2)
     L_normal = tf.reshape(L_normal, shape=[len(L_normal), 1])
 
     return L_normal
-
-
-# In[ ]:
 
 
 def mnl_func(v):
@@ -106,9 +88,6 @@ def mnl_func(v):
     mnl_P = exp_inv/exp_sum
     
     return mnl_P
-
-
-# In[ ]:
 
 
 def model_fun(x_name, x_val, param_name, param_val):
@@ -189,10 +168,6 @@ def cost_fun(y_train, yhat):
 
     return -tf.reduce_mean(tf.reduce_sum(y_train*tf.math.log(yhat + 1e-8), axis=1), axis=0)
 
-
-# In[ ]:
-
-
 # Obtain the shapes of all trainable parameters in the model (Estimation)
 def loss_gradient(x_name, x_val, param_name, param_val, y_train):
     
@@ -259,9 +234,6 @@ Trained_Results = tfp.optimizer.bfgs_minimize(value_and_gradients_function=loss_
                                                                                          max_iterations=500)
 
 
-# In[ ]:
-
-
 # Estimated Variable
 est_title = pd.DataFrame(params.keys(), columns=['Variable'])
 # Estimated Parameters
@@ -275,17 +247,11 @@ Est_result = pd.concat([est_title, est_para, Std_err, t_ratio], axis=1).set_inde
 print(Est_result)
 
 
-# In[ ]:
-
-
 # Loglikelihood Function
 LL_initi = tf.reduce_sum(y_train*tf.math.log(model_fun(x_name, x_val, param_name, init_params)+1e-8))
 LL_final = tf.reduce_sum(y_train*tf.math.log(model_fun(x_name, x_val, param_name, param_val)+1e-8))
 print("LL(initial):", LL_initi.numpy())
 print("LL(final):  ", LL_final.numpy())
-
-
-# In[ ]:
 
 
 # Akaike information criterion (AIC)
