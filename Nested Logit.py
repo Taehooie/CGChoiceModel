@@ -173,7 +173,7 @@ def LL_gradient(x_name, x_val, param_name, param_val, y_train):
     part = []
 
     for i, shape in enumerate(shapes):
-        n = numpy.product(shape)
+        n = numpy.prod(shape)
         idx.append(tf.reshape(tf.range(count, count+n, dtype=tf.int32), shape))
         part.extend([i]*n)
         count += n
